@@ -1,0 +1,19 @@
+{
+  "nodes": [
+    {
+      "path": "test/tests/ms/math.ms.js",
+      "instance": 1,
+      "port": 4000,
+      "stdio": "file",
+      "params": ""
+    },
+    {
+      "path": "test/tests/ms/string.ms.js",
+      "instance": 1,
+      "increment": 10,
+      "port": 5000,
+      "stdio": "file",
+      "params": ""
+    }
+  ]
+}

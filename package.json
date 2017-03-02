@@ -1,0 +1,22 @@
+{
+  "name": "xyz.ping.stochastic.bootstrap",
+  "version": "0.1.0",
+  "description": "swim ping bootstrap function for xyz",
+  "main": "ping.swim.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "lintit": "standard './ping.swim.js' --fix"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "xyz-core": "latest"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "xyz-cli": "^0.3.1",
+    "xyz-core": "^0.3.1"
+  },
+  "author": "kian.peymani@gmail.com",
+  "license": "ISC"
+}
