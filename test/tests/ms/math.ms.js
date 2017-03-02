@@ -12,6 +12,7 @@ var mathMs = new XYZ({
 })
 
 mathMs.bootstrap(require('./../../../ping.swim'), {})
+
 mathMs.register('/math/decimal/mul', fn.mul)
 mathMs.register('/math/decimal/neg', fn.neg)
 mathMs.register('/math/decimal/sub', fn.sub)

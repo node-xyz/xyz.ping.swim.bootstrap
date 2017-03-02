@@ -52,6 +52,7 @@ let stochasticPingBoostraper = (xyz, config) => {
         }, interval)
       } else {
         // TODO: we are not using `nodes` key of the response...
+        logger.verbose(`introduction handshake with ${destNode} done.`)
         SR.foreignNodes[destNode] = body.services
         SR.foreignRoutes[destNode] = body.transportServers
       }
