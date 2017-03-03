@@ -3,7 +3,7 @@ let fn = require('./../../mock.functions')
 
 var mathMs = new XYZ({
   selfConf: {
-    logLevel: 'debug',
+    logLevel: 'verbose',
     name: 'math.ms',
     host: '127.0.0.1',
     defaultBootstrap: false

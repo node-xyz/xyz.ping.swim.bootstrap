@@ -3,7 +3,7 @@ let fn = require('./../../mock.functions')
 
 var stringMs = new XYZ({
   selfConf: {
-    logLevel: 'debug',
+    logLevel: 'verbose',
     name: 'string.ms',
     host: '127.0.0.1',
     defaultBootstrap: false,
@@ -24,6 +24,6 @@ setInterval(() => {
   stringMs.call({servicePath: '/math/decimal/mul', payload: {x: 2, y: 3}}, (err, body, res) => {
     console.log(err, body)
   })
-}, 1000)
+}, 10000)
 
 console.log(stringMs)
