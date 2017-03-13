@@ -5,6 +5,7 @@
   "main": "ping.swim.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec",
+    "test-travis": "rm -Rf node_modules && npm install && ./node_modules/.bin/mocha --reporter spec",
     "lintit": "standard './ping.swim.js' --fix"
   },
   "dependencies": {

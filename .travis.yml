@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- '7'
+deploy:
+  provider: npm
+  email: kian.peymani@gmail.com
+  api_key:
+    secure: eZ1XXy6EAsfbqjY1VEIo4R9Bf69yGmLv51G3L4y60bZDL7IAydvvinsXmVmp2MeRPLd0hk5kAq5Ayxm9NaWuQN5ltBbQjCr2TjzaIMidS1yuL8mg5hJxFDJ1CRdSzqq7q+HaoGWExUWNftxJKVmCoPj9XWT/pwBrdsTY+ZL6a922dyCExSBi3tRXPpgKTjHRRcH96fDwkjBpVUoC9+xgSmUKNCr1gbbFOk7HfDoi0mcpEiwj7ogd7Sa+eDfp/I9jgU0mQgGqc3PoZzv02mJeqSAJX+ruOjkSFNRl1fG1i/mSpZhvaaH12zyEX0QxqlDLQirmhW1/RSUM3j9wPlp8Sk1Co2B9ZJjE9dFCwWHEk96R8X6tOQ+su6y1qpOOIe5m+Xj/71YaqR4aqM/BDCiVw/ycjDkD8xqj9X9bNqEdCy2N3+LGh7n6KZoeHVtA67IWegDTt1sWMG0nilMPrSMmWWQMLtZhWCWLXjAtORdIqQ9JgzNzmxK09dli9lNa0Tvd5s2BtrznWuHeEBjT68Uu/12bQPGXnzgLqXZfaU4z59OQsr5aVobW18e5Qm92cZVlf30SO2FFur0pAbjzfD4PfhbLHFW5qNdFeYIrFu6/emKUOrCVf8l4lV+8PeA0iIBYjNIZXFowStQmvrIIsemw4GdbuFLg5278vkg4kT6bnm8=
+  on:
+    repo: node-xyz/xyz.ping.swim.bootstrap
+    branch: master

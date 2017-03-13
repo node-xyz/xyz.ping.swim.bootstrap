@@ -45,13 +45,15 @@ let stochasticPingBoostraper = (xyz, config) => {
         if (introductionOutOfReach[destNode] >= maxOutOfReachWait) {
           SR.kickNode(destNode)
           return
+        } else {
+          setTimeout(() => {
+            introductionOutOfReach[destNode] ++
+            introduce(destNode)
+          }, interval)
         }
-        setTimeout(() => {
-          introductionOutOfReach[destNode] ++
-          introduce(destNode)
-        }, interval)
       } else {
         // TODO: we are not using `nodes` key of the response...
+        logger.verbose(`SWIM :: introduction handshake with ${destNode} done.`)
         SR.foreignNodes[destNode] = body.services
         SR.foreignRoutes[destNode] = body.transportServers
       }
@@ -69,12 +71,11 @@ let stochasticPingBoostraper = (xyz, config) => {
         node: node
       }, function (_node, err, body, resp) {
         if (err) {
-          logger.error(`braodcasting ${payload} to ${node} failed`)
-          cb(err)
+          logger.error(`SWIM :: braodcasting ${JSON.stringify(payload)} to ${node} failed`)
         } else {
           sent++
           if (sent === total) {
-            cb(null, `message broadcastet to ${nodes} successfully`)
+            cb(null, `SWIM :: message broadcastet to ${nodes} successfully`)
           }
         }
       }.bind(null, node))
@@ -85,14 +86,14 @@ let stochasticPingBoostraper = (xyz, config) => {
   let seeds = CONFIG.getSelfConf().seed
   function join () {
     let destNode = seeds[joinIndex]
-    logger.verbose(`attempting join via ${destNode}`)
+    logger.verbose(`SWIM :: attempting join via ${destNode}`)
     transport.send({
       node: destNode,
       route: httpPrefix,
       payload: {title: 'join-req', id: _id}
     }, (err, body) => {
       if (err) {
-        logger.error(`join via ${destNode} failed. trying next seed node...`)
+        logger.error(`SWIM :: join via ${destNode} failed. trying next seed node...`)
         joinIndex = (joinIndex + 1) % (seeds.length)
         setTimeout(join, interval + Util.Random(threshold))
       } else {
@@ -216,11 +217,11 @@ let stochasticPingBoostraper = (xyz, config) => {
    // TODO: choose two random nodes and send an indirect probe to them
   function indirectProbeReq (destNode) {
     if (!directProbeTargets[destNode]) {
-      logger.warn(`attempting to probe ${destNode} indirectly (or responde to previous probe-req) which does not exist anymore. skipping...`)
+      logger.warn(`SWIM :: attempting to probe ${destNode} indirectly (or responde to previous probe-req) which does not exist anymore. skipping...`)
       return
     }
     if (directProbeTargets[destNode].indirect) {
-      logger.warn(`i was asked to probe ${destNode} as ambassedor but it failed. Responding to sender...`)
+      logger.warn(`SWIM :: I was asked to probe ${destNode} as ambassedor but it failed. Responding to sender...`)
       let response = directProbeTargets[destNode].response
       response.writeHead(404)
       response.jsonify({error: `node ${destNode} was unreachable.`})
@@ -228,8 +229,7 @@ let stochasticPingBoostraper = (xyz, config) => {
       return
     }
     let nodes = CONFIG.getSystemConf().nodes
-    let randomNode1 = '127.0.0.1:4000'
-    // let randomNode1 = nodes[Math.floor(Math.random() * nodes.length)]
+    let randomNode1 = nodes[Math.floor(Math.random() * nodes.length)]
     logger.verbose(`${chalk.bold(destNode)} failed. pinging it indirectly using ${chalk.bold(randomNode1)}`)
     transport.send({
       node: randomNode1,
@@ -241,7 +241,7 @@ let stochasticPingBoostraper = (xyz, config) => {
       }
     }, (err, body, resp) => {
       if (err) {
-        // QUESTION: this could be omitted... No
+        logger.warn(`SWIM :: indirect probe failed. braodcasting {${destNode}} LEAVE message`)
         SR.kickNode(destNode)
         broadcastHttp({
           title: 'leave',
@@ -266,6 +266,7 @@ let stochasticPingBoostraper = (xyz, config) => {
   function onHttpPingReceive (params, next, end) {
     let payload = params[2]
     let response = params[1]
+    logger.verbose(`SWIM :: HTTP message received ${JSON.stringify(payload)}`)
     if (payload.title === 'introduce') {
       onIntroduce(payload.id, response)
     } else if (payload.title === 'indirectProbeReq') {
@@ -281,6 +282,9 @@ let stochasticPingBoostraper = (xyz, config) => {
       broadcastHttp({
         title: 'join',
         target: payload.id
+      }, (err, resp) => {
+        if (err) logger.error(`error ${err} while broadcasting node join`)
+        else logger.verbose(`node ${payload.id} join accepted. message is broadcasted.`)
       })
     } else if (payload.title === 'join') {
       SR.joinNode(payload.target)

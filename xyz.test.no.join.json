@@ -5,7 +5,7 @@
       "instance": 1,
       "port": 4000,
       "stdio": "file",
-      "params": ""
+      "params": "--xys-node 127.0.0.1:5000"
     },
     {
       "path": "test/tests/ms/string.ms.js",
@@ -13,7 +13,7 @@
       "increment": 10,
       "port": 5000,
       "stdio": "file",
-      "params": ""
+      "params": "--xys-node 127.0.0.1:4000"
     }
   ]
 }
