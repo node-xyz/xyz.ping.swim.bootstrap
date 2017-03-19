@@ -1,6 +1,6 @@
 {
   "name": "xyz.ping.stochastic.bootstrap",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "swim ping bootstrap function for xyz",
   "main": "ping.swim.js",
   "scripts": {
