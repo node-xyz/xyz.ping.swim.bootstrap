@@ -1,7 +1,7 @@
-const interval = 2 * 1000
-const threshold = 5 * 1000
-const probeTimeout = 5 * 1000
-const maxOutOfReachWait = 5
+let interval
+const threshold = 2 * 1000
+let probeTimeout
+let maxOutOfReachWait
 const GenericMiddlewareHandler = require('xyz-core/src/Middleware/generic.middleware.handler')
 const _httpExport = require('xyz-core/src/Transport/Middlewares/call/http.export.middleware')
 const _udpExport = require('xyz-core/src/Transport/Middlewares/call/udp.export.middleware')
@@ -11,6 +11,13 @@ let stochasticPingBoostraper = (xyz, config) => {
   config = config || {}
   config.httpPort = config.httpPort || Number(xyz.id().port)
   config.udpPort = config.udpPort || Number(xyz.id().port) + 1
+  config.httpPrefix = config.httpPrefix || 'SPING_HTTP'
+  config.UdpPrefix = config.UdpPrefix || 'SPING_UDP'
+
+  interval = config.interval || 2 * 1000
+  probeTimeout = config.probeTimeout || 5 * 1000
+  maxOutOfReachWait = config.maxOutOfReachWait || 5
+
   // variables passed through xyz instance
   let logger = xyz.logger
   let CONFIG = xyz.CONFIG
@@ -319,9 +326,9 @@ let stochasticPingBoostraper = (xyz, config) => {
   // ---- create all of the required middlewares
   // will create one new route on the server identified by the `port` parameter
   // TODO: configurable?
-  const httpPrefix = 'SPING_HTTP'
-  let pingHttpReceiveMW = new GenericMiddlewareHandler(xyz, 'pingHttpReceiveMW', httpPrefix)
-  let pingHttpDispatchMW = new GenericMiddlewareHandler(xyz, 'pingHttpDispatchMW', httpPrefix)
+  const httpPrefix = config.httpPrefix
+  let pingHttpReceiveMW = new GenericMiddlewareHandler(xyz, 'swim.http.receive.mw', httpPrefix)
+  let pingHttpDispatchMW = new GenericMiddlewareHandler(xyz, 'swim.http.dispatch.mw', httpPrefix)
   pingHttpReceiveMW.register(0, onHttpPingReceive)
   pingHttpReceiveMW.register(0, require('./authorize.introduce'))
   pingHttpDispatchMW.register(0, _httpExport)
@@ -330,11 +337,10 @@ let stochasticPingBoostraper = (xyz, config) => {
   SR.transport.servers[config.httpPort].registerRoute(httpPrefix, pingHttpReceiveMW)
 
   // will create one new dedicated UDP server for probing
-  // TODO: why port + 1 ?
-  const UdpPrefix = 'SPING_UDP'
+  const UdpPrefix = config.UdpPrefix
   xyz.registerServer('UDP', config.udpPort, false)
-  let pingUdpReceiveMW = new GenericMiddlewareHandler(xyz, 'pingUdpReceiveMW', UdpPrefix)
-  let pingUdpDispatchMW = new GenericMiddlewareHandler(xyz, 'pingUdpDispatchMW', UdpPrefix)
+  let pingUdpReceiveMW = new GenericMiddlewareHandler(xyz, 'swim.udp.receive.mw', UdpPrefix)
+  let pingUdpDispatchMW = new GenericMiddlewareHandler(xyz, 'swim.udp.dispatch.mw', UdpPrefix)
   pingUdpReceiveMW.register(0, onUdpPingReceive)
   pingUdpDispatchMW.register(0, _udpExport)
 
