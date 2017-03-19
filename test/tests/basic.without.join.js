@@ -42,7 +42,7 @@ it('remove one of them', function (done) {
         expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL - 1)
         done()
       })
-    }, 15 * 1000)
+    }, 25 * 1000)
   })
 })
 
