@@ -4,7 +4,7 @@
       "path": "test/tests/ms/math.ms.js",
       "instance": 1,
       "port": 4000,
-      "stdio": "file",
+      "stdio": "console",
       "params": "--xys-node 127.0.0.1:5000"
     },
     {
@@ -12,7 +12,7 @@
       "instance": 1,
       "increment": 10,
       "port": 5000,
-      "stdio": "file",
+      "stdio": "console",
       "params": "--xys-node 127.0.0.1:4000"
     }
   ]
