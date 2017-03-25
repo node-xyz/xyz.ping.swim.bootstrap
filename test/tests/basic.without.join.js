@@ -30,7 +30,7 @@ it('initial state', function (done) {
 })
 
 it('remove one of them', function (done) {
-  this.timeout(20 * 1000)
+  this.timeout(30 * 1000)
   TESTER.call({
     servicePath: 'node/kill',
     payload: `0`
@@ -42,7 +42,7 @@ it('remove one of them', function (done) {
         expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL - 1)
         done()
       })
-    }, 15 * 1000)
+    }, 25 * 1000)
   })
 })
 
