@@ -27,7 +27,6 @@ let stochasticPingBoostraper = (xyz, config) => {
 
   let SR = xyz.serviceRepository
   let transport = SR.transport
-  const _id = xyz.id().netId
 
   /**
    * will send introductory info to each node. should be called once for each foreign node
@@ -45,7 +44,7 @@ let stochasticPingBoostraper = (xyz, config) => {
     transport.send({
       node: destNode,
       route: httpPrefix,
-      payload: {title: 'introduce', id: _id}
+      payload: {title: 'introduce'}
     }, (err, body, resp) => {
       if (err) {
         logger.error(`SWIM :: introduction to ${destNode} failed [out of reach for ${introductionOutOfReach[destNode]}]: ${err} - ${JSON.stringify(body)}`)
@@ -97,7 +96,7 @@ let stochasticPingBoostraper = (xyz, config) => {
     transport.send({
       node: destNode,
       route: httpPrefix,
-      payload: {title: 'join-req', id: _id}
+      payload: {title: 'join-req'}
     }, (err, body) => {
       if (err) {
         logger.error(`SWIM :: join via ${destNode} failed. trying next seed node...`)
@@ -142,7 +141,7 @@ let stochasticPingBoostraper = (xyz, config) => {
       node: destNode,
       route: UdpPrefix,
       redirect: true,
-      payload: {title: 'directProbe', nounce: nounce, id: _id}
+      payload: {title: 'directProbe', nounce: nounce}
     }, (err, body, _response) => {
       let timeout = setTimeout(() => {
         indirectProbeReq(destNode)
@@ -167,7 +166,7 @@ let stochasticPingBoostraper = (xyz, config) => {
       node: payload.id,
       redirect: true,
       route: UdpPrefix,
-      payload: {title: 'directProbeResponse', nounce: payload.nounce, id: _id}
+      payload: {title: 'directProbeResponse', nounce: payload.nounce}
     }, (err, body, resp) => {
       logger.debug(`SWIM :: directProbe from ${chalk.bold(payload.id)} responded.`)
     })
@@ -243,8 +242,7 @@ let stochasticPingBoostraper = (xyz, config) => {
       route: httpPrefix,
       payload: {
         title: 'indirectProbeReq',
-        target: destNode,
-        id: _id
+        target: destNode
       }
     }, (err, body, resp) => {
       if (err) {
@@ -252,7 +250,6 @@ let stochasticPingBoostraper = (xyz, config) => {
         SR.kickNode(destNode)
         broadcastHttp({
           title: 'leave',
-          id: _id,
           target: destNode}, (err, resp) => {
           if (err) {
             logger.error(`error while broadcasting node ${destNode} leave ${err}`)
@@ -270,10 +267,14 @@ let stochasticPingBoostraper = (xyz, config) => {
    * Handle http ping events
    * @method onHttpPingReceive
    */
-  function onHttpPingReceive (params, next, end) {
-    let payload = params[2]
-    let response = params[1]
-    logger.verbose(`SWIM :: HTTP message received ${JSON.stringify(payload)}`)
+  function onHttpPingReceive (xMessage, next, end) {
+    // TODO: this is a temp fix to move to v0.4 fasts
+    let payload = xMessage.message.userPayload
+    payload.id = xMessage.message.xyzPayload.senderId
+
+    let response = xMessage.response
+
+    logger.verbose(`SWIM :: HTTP message received ${wrapper('bold', JSON.stringify(payload))}`)
     if (payload.title === 'introduce') {
       onIntroduce(payload.id, response)
     } else if (payload.title === 'indirectProbeReq') {
@@ -307,8 +308,11 @@ let stochasticPingBoostraper = (xyz, config) => {
    * @method onUdpPingReceive
    * @return {[type]}         [description]
    */
-  function onUdpPingReceive (params, next, end, xyz) {
-    let payload = params[0].json
+  function onUdpPingReceive (xMessage, next, end, xyz) {
+    // TODO: this is a temp fix to move to v0.4 fasts
+    let payload = xMessage.message.userPayload
+    payload.id = xMessage.message.xyzPayload.senderId
+
     if (payload.title === 'directProbe') {
       onDirectProbe(payload)
     } else if (payload.title === 'directProbeResponse') {
