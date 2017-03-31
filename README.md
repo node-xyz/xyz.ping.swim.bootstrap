@@ -35,7 +35,7 @@ $ npm install --save xyz.ping.swim.bootstrap
 
 Like other pings, if it is to be used, you should disable the Default Ping:
 
-```
+```javascript
 var ms = new XYZ({
   selfConf: {
     defaultBootstrap: false
