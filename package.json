@@ -9,13 +9,13 @@
     "lintit": "standard './ping.swim.js' --fix"
   },
   "dependencies": {
-      "xyz-core": "latest"
+      "xyz-core": "0.4.x"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^2.5.3",
     "xyz-cli": "^0.3.1",
-    "xyz-core": "^0.3.1"
+    "xyz-core": "0.4.x"
   },
   "author": "kian.peymani@gmail.com",
   "license": "ISC"
