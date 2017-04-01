@@ -1,6 +1,6 @@
 {
   "name": "xyz.ping.swim.bootstrap",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "swim ping bootstrap function for xyz",
   "main": "ping.swim.js",
   "scripts": {
