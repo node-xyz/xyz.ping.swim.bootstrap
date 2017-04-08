@@ -7,12 +7,12 @@ let identifiers = []
 let TESTER
 const TOTAL = 2
 before(function (done) {
-  this.timeout(15 * 1000)
+  this.timeout(25 * 1000)
   test.setUpTestEnv((p) => {
     processes = p
     identifiers = Object.keys(processes)
     TESTER = test.getTester()
-    setTimeout(done, 12 * 1000)
+    setTimeout(done, 22 * 1000)
   }, 'xyz.test.no.join.json')
 })
 
