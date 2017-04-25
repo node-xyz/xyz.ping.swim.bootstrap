@@ -2,9 +2,9 @@ let interval
 const threshold = 2 * 1000
 let probeTimeout
 let maxOutOfReachWait
-const GenericMiddlewareHandler = require('xyz-core/src/Middleware/generic.middleware.handler')
-const _httpExport = require('xyz-core/src/Transport/Middlewares/call/http.export.middleware')
-const _udpExport = require('xyz-core/src/Transport/Middlewares/call/udp.export.middleware')
+const GenericMiddlewareHandler = require('xyz-core/built/Middleware/generic.middleware.handler').GenericMiddlewareHandler
+const _httpExport = require('xyz-core/built/Transport/Middlewares/http.export.middleware').default
+const _udpExport = require('xyz-core/built/Transport/Middlewares/udp.export.middleware')._udpExport
 const chalk = require('chalk')
 
 let stochasticPingBoostraper = (xyz, config) => {
