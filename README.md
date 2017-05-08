@@ -3,7 +3,7 @@
 SWIM ping bootstrap function for xyz-core.
 
 [![Build Status](https://travis-ci.org/node-xyz/xyz.ping.swim.bootstrap.svg?branch=master)](https://travis-ci.org/node-xyz/xyz.ping.swim.bootstrap) [![npm version](https://badge.fury.io/js/xyz.ping.swim.bootstrap.svg)](https://badge.fury.io/js/xyz.ping.swim.bootstrap)
-
+[![dependencies Status](https://david-dm.org/node-xyz/xyz.ping.swim.bootstrap/status.svg)](https://david-dm.org/node-xyz/xyz.ping.swim.bootstrap)
 ---
 
 This module implements the [SWIM](http://www.cs.cornell.edu/~asdas/research/dsn02-SWIM.pdf) (**S**calable **W**eakly-consistent **I**nfection-style Process Group **M**embership
